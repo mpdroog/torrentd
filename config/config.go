@@ -5,10 +5,13 @@ import (
 	"os"
 	"time"
 	"log"
+	"fmt"
+	"strings"
 )
 
 type Config struct {
 	Listen string
+	Basedir string
 }
 
 var (
@@ -22,6 +25,19 @@ var (
 	// Metrics
 	Appstart    time.Time
 )
+
+func check() error {
+	if len(C.Listen) == 0 {
+		return fmt.Errorf("No listen-port given.")
+	}
+	if _, e := os.Stat(C.Basedir); os.IsNotExist(e) {
+		return fmt.Errorf("Basedir does not exist: %s", C.Basedir)
+	}
+	if !strings.HasSuffix("/", C.Basedir) {
+		C.Basedir += "/"
+	}
+	return nil
+}
 
 func Init(f string) error {
 	Appstart = time.Now()
@@ -40,5 +56,5 @@ func Init(f string) error {
 	}
 
 	L = log.New(os.Stdout, "", log.LstdFlags)
-	return nil
+	return check()
 }

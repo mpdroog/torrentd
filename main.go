@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os"
 	"fmt"
 	"flag"
 	"torrentd/config"
@@ -18,13 +19,13 @@ func main() {
     }
 
 	if e := config.Init(configPath); e != nil {
-		panic(e)
+		fmt.Println(e.Error())
+		os.Exit(1)
+		return
 	}
 	if config.Verbose {
 		fmt.Println(config.C)
 	}
-	if len(config.C.Listen) == 0 {
-		panic("No listen-port given.")
-	}
+
 	Control()
 }
