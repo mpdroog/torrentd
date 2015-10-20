@@ -11,6 +11,7 @@ import (
 	"github.com/anacrolix/torrent/metainfo"
 	"torrentd/config"
 	"os"
+	"strings"
 )
 
 type Add struct {
